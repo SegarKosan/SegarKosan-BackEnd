@@ -5,14 +5,12 @@ let cachedConn = null;
 const connectDB = async () => {
   if (cachedConn) return cachedConn;
 
-  if (!process.env.MONGO_URI) {
-    throw new Error("MONGO_URI is missing!");
-  }
+  if (!process.env.MONGO_URI) throw new Error("MONGO_URI is missing!");
 
   try {
     cachedConn = await mongoose.connect(process.env.MONGO_URI, {
       dbName: "segarkosan",
-      serverSelectionTimeoutMS: 5000,
+      serverSelectionTimeoutMS: 5000, // cepat error jika tidak bisa connect
     });
 
     console.log(`[DB] MongoDB Connected: ${cachedConn.connection.host}`);
