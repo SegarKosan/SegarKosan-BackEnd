@@ -1,21 +1,25 @@
 const mongoose = require("mongoose");
 
+let cachedConn = null;
+
 const connectDB = async () => {
+  if (cachedConn) return cachedConn;
+
+  if (!process.env.MONGO_URI) {
+    throw new Error("MONGO_URI is missing!");
+  }
+
   try {
-    const uri = process.env.MONGO_URI;
-
-    if (!uri) {
-      throw new Error("MONGO_URI is missing!");
-    }
-
-    const conn = await mongoose.connect(uri, {
+    cachedConn = await mongoose.connect(process.env.MONGO_URI, {
       dbName: "segarkosan",
+      serverSelectionTimeoutMS: 5000,
     });
 
-    console.log(`[DB] MongoDB Connected: ${conn.connection.host}`);
+    console.log(`[DB] MongoDB Connected: ${cachedConn.connection.host}`);
+    return cachedConn;
   } catch (error) {
-    console.error(`[DB] Error: ${error.message}`);
-    process.exit(1);
+    console.error(`[DB] MongoDB Connection Error: ${error.message}`);
+    throw error;
   }
 };
 
