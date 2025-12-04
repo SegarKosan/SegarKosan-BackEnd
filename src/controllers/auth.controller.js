@@ -107,3 +107,59 @@ exports.login = async (req, res) => {
       });
   }
 };
+
+// Google Login Controller
+exports.googleLogin = async (req, res) => {
+  try {
+    await connectDB();
+    const { token } = req.body;
+    
+    // Verify and get user info using the access token
+    const response = await fetch("https://www.googleapis.com/oauth2/v3/userinfo", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    if (!response.ok) {
+      throw new Error("Invalid Google token");
+    }
+
+    const { sub: googleId, name, email } = await response.json();
+
+    let user = await User.findOne({ email });
+
+    if (user) {
+      if (!user.googleId) {
+        user.googleId = googleId;
+        await user.save();
+      }
+    } else {
+      user = await User.create({
+        name,
+        email,
+        googleId,
+      });
+    }
+
+    const jwtToken = jwt.sign(
+      { userId: user._id, email: user.email },
+      process.env.JWT_SECRET || "fallback_secret",
+      { expiresIn: "24h" }
+    );
+
+    res.json({
+      success: true,
+      message: "Google login successful",
+      data: {
+        token: jwtToken,
+        user: { id: user._id, name: user.name, email: user.email },
+      },
+    });
+  } catch (error) {
+    console.error("[AUTH] Google Login error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error during Google login",
+      error: error.message,
+    });
+  }
+};
