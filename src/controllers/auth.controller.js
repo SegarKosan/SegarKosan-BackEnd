@@ -1,6 +1,7 @@
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+const axios = require("axios");
 const connectDB = require("../config/db"); // <-- pastikan import
 
 // Register Controller
@@ -115,15 +116,11 @@ exports.googleLogin = async (req, res) => {
     const { token } = req.body;
     
     // Verify and get user info using the access token
-    const response = await fetch("https://www.googleapis.com/oauth2/v3/userinfo", {
+    const response = await axios.get("https://www.googleapis.com/oauth2/v3/userinfo", {
       headers: { Authorization: `Bearer ${token}` },
     });
 
-    if (!response.ok) {
-      throw new Error("Invalid Google token");
-    }
-
-    const { sub: googleId, name, email } = await response.json();
+    const { sub: googleId, name, email } = response.data;
 
     let user = await User.findOne({ email });
 
