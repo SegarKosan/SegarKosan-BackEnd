@@ -4,7 +4,12 @@ require("dotenv").config();
 const connectDB = require("./config/db");
 
 const app = express();
-const allowedOrigins = ["https://segarkosan.testingfothink.my.id", undefined];
+const allowedOrigins = [
+  "https://segarkosan.testingfothink.my.id",
+  "https://segarkosan.vercel.app",
+  undefined,
+  null,
+];
 
 app.use(
   cors({
@@ -12,6 +17,7 @@ app.use(
       if (allowedOrigins.includes(origin) || !origin) {
         callback(null, true);
       } else {
+        if (!origin) return callback(null, true);
         callback(new Error("Not allowed by CORS: " + origin));
       }
     },
