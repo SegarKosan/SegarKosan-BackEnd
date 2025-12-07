@@ -30,6 +30,15 @@ app.use((req, res, next) => {
 });
 
 app.use(express.json());
+
+app.get("/", (req, res) => {
+  res.status(200).json({
+    message: "Welcome to SegarKosan API",
+    status: "Server is running smoothly",
+    server_time: new Date().toISOString(),
+  });
+});
+
 app.use("/auth", require("./routes/auth.routes"));
 
 app.get("/test-db", async (req, res) => {
