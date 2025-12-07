@@ -4,13 +4,24 @@ require("dotenv").config();
 const connectDB = require("./config/db");
 
 const app = express();
-app.use(cors({
-  origin: [
-    "https://segarkosan.testingfothink.my.id"
-  ],
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
-}));
+const allowedOrigins = ["https://segarkosan.testingfothink.my.id", undefined];
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (allowedOrigins.includes(origin) || !origin) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS: " + origin));
+      }
+    },
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
+
+app.options("*", cors());
 app.use(express.json());
 
 app.use("/auth", require("./routes/auth.routes"));
