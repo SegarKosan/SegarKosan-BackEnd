@@ -483,10 +483,4 @@ npm run db:seed      # Alias for seed
 
 ## 📄 License
 
-ISC
-
----
-
-**Last Updated**: 2024
-**Project Name**: Segar Kosan Backend
-**Version**: 1.0.0
+© 2025 SegarKosan by Morning Group. All rights reserved.
