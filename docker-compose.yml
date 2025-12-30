@@ -1,4 +1,6 @@
 services:
+  ports:
+    - "80:80"
   backend:
     build: .
     container_name: segarkosan-backend
