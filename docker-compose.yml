@@ -1,12 +1,14 @@
+version: "3.8"
+
 services:
-  ports:
-    - "80:80"
   backend:
     build: .
     container_name: segarkosan-backend
     restart: always
     env_file:
       - .env
+    expose:
+      - "5000"
 
   nginx:
     image: nginx:alpine
