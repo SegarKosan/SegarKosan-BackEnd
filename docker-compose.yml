@@ -21,3 +21,6 @@ services:
       - ./certbot:/etc/letsencrypt
     depends_on:
       - backend
+    command: >
+      sh -c "rm -f /etc/nginx/conf.d/default.conf &&
+             nginx -g 'daemon off;'"
