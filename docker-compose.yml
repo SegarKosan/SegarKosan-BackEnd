@@ -17,7 +17,7 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./nginx/conf.d/segarkosan.conf:/etc/nginx/conf.d/segarkosan.conf:ro
       - ./certbot:/etc/letsencrypt
     depends_on:
       - backend
