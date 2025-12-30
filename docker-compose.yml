@@ -1,26 +1,18 @@
-version: "3.9"
-
 services:
   backend:
     build: .
     container_name: segarkosan-backend
-    restart: always
-    env_file: .env
+    restart: unless-stopped
     expose:
       - "5000"
 
   nginx:
     image: nginx:alpine
     container_name: segarkosan-nginx
-    restart: always
+    restart: unless-stopped
     ports:
       - "80:80"
-      - "443:443"
     volumes:
-      - ./nginx/conf.d/segarkosan.conf:/etc/nginx/conf.d/segarkosan.conf:ro
-      - ./certbot:/etc/letsencrypt
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
     depends_on:
       - backend
-    command: >
-      sh -c "rm -f /etc/nginx/conf.d/default.conf &&
-             nginx -g 'daemon off;'"
