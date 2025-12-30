@@ -7,8 +7,6 @@ RUN npm install
 
 COPY . .
 
-RUN npm install -g pm2
-
 EXPOSE 5000
 
-CMD ["pm2-runtime", "src/app.js"]
+CMD ["node", "src/app.js"]
