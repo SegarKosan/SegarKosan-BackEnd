@@ -9,10 +9,12 @@ services:
   nginx:
     image: nginx:alpine
     container_name: segarkosan-nginx
-    restart: unless-stopped
     ports:
       - "80:80"
+      - "443:443"
     volumes:
       - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - /etc/letsencrypt:/etc/letsencrypt:ro
     depends_on:
       - backend
+    restart: unless-stopped
