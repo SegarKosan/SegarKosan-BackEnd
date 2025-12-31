@@ -16,7 +16,7 @@ const server = http.createServer(app);
     mqtt();
     websocket.init(server);
 
-    const port = process.env.PORT || 8080;
+    const port = process.env.PORT || 5000;
 
     // 3. Jalankan server hanya jika DB sudah aman
     server.listen(port, () => {
