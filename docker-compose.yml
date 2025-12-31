@@ -1,10 +1,12 @@
 services:
-  backend:
-    build: .
-    container_name: segarkosan-backend
-    restart: unless-stopped
-    expose:
-      - "8080:5000"
+backend:
+  build:
+    context: .
+    dockerfile: Dockerfile
+  container_name: segarkosan-backend
+  ports:
+    - "8080:5000"
+  restart: unless-stopped
 
   nginx:
     image: nginx:alpine
