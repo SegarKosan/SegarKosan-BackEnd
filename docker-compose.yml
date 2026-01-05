@@ -23,8 +23,8 @@ services:
     depends_on:
       - backend
     restart: unless-stopped
-  networks:
-    - infra_net
+    networks:
+      - infra_net
 
 networks:
   infra_net:
