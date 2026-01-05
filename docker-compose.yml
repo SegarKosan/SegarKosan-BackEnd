@@ -1,30 +1,29 @@
+version: "3.9"
+
 services:
   backend:
     build: .
     container_name: segarkosan-backend
-    restart: unless-stopped
-    # --- TAMBAHKAN BAGIAN INI ---
-    env_file:
-      - .env
-    # ----------------------------
     expose:
       - "5000"
+    networks:
+      - infra_net
+    restart: always
 
   nginx:
     image: nginx:alpine
-    container_name: segarkosan-nginx
+    container_name: main-nginx
     ports:
       - "80:80"
       - "443:443"
     volumes:
-      # Pastikan file konfigurasi Nginx Anda ada di folder host ./nginx/conf.d/
-      - ./nginx/conf.d:/etc/nginx/conf.d:ro
-      - /etc/letsencrypt:/etc/letsencrypt:ro
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - /etc/letsencrypt:/etc/letsencrypt
     depends_on:
       - backend
-    restart: unless-stopped
     networks:
       - infra_net
+    restart: always
 
 networks:
   infra_net:
